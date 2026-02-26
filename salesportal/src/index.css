@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0D6EB4;
+  --color-secondary: #119144;
+  --font-sans: "Inter", "Apple SD Gothic Neo", "Pretendard", sans-serif;
+}
+
+:root {
+  --primary: #0D6EB4;
+  --secondary: #119144;
+}
+
+body {
+  background-color: #ffffff;
+  color: #1d1d1f;
+  /* Apple-style dark text */
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Apple minimalism styles */
+.apple-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border: 1px solid #f2f2f7;
+}
+
+.apple-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.apple-button:active {
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+/* Tab Bar Blur effect if needed */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@keyframes progress {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-progress {
+  animation: progress 2s infinite ease-in-out;
+}

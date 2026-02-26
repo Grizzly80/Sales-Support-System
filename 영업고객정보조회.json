@@ -1,0 +1,1207 @@
+{
+  "name": "영업고객정보조회",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8bd6e5a-602f-4159-9c8a-097e7f6857aa",
+              "name": "body.companyName",
+              "value": "={{ $('Webhook').item.json.query.customerName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -1312
+      ],
+      "id": "6b410060-99ff-4b4a-aa63-7deb462b6586",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ckgUe0Kh6fwvuBQ9",
+          "mode": "list",
+          "cachedResultName": "dart_dorp _cd",
+          "cachedResultUrl": "/projects/nBQRqCQPpjInn3qa/datatables/ckgUe0Kh6fwvuBQ9"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "corp_name",
+              "condition": "ilike",
+              "keyValue": "={{ $json.body.companyName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        -1312
+      ],
+      "id": "1d65dea5-eac1-4388-96bc-ba9e23271c44",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6734fbe2-72ca-4127-96d3-ce71bbcf49e9",
+              "name": "corp_code",
+              "value": "={{ $json.corp_code }}",
+              "type": "string"
+            },
+            {
+              "id": "3083f773-986c-43ab-b4ec-5502679189b6",
+              "name": "corp_name",
+              "value": "={{ $json.corp_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        -1312
+      ],
+      "id": "e3f5d98d-18f4-4c35-bfff-e8115a94a59c",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "url": "https://opendart.fss.or.kr/api/company.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "crtfc_key",
+              "value": "5d834244fe90807501a032bf79de260c2c5fae30"
+            },
+            {
+              "name": "corp_code",
+              "value": "={{ $json.corp_code }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        880,
+        -1312
+      ],
+      "id": "b3602de9-ff8e-4d06-b56f-00fa8cb688b7",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ac20a496-9a1d-4545-83b2-960c3cf39998",
+              "name": "기업코드",
+              "value": "={{ $json.corp_code }}",
+              "type": "string"
+            },
+            {
+              "id": "02dd97ac-08ef-4089-89a1-8d7b0e47ae1d",
+              "name": "회사명",
+              "value": "={{ $json.corp_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a540b919-f589-440f-aad5-759afd77de96",
+              "name": "대표명",
+              "value": "={{ $json.ceo_nm }}",
+              "type": "string"
+            },
+            {
+              "id": "e90681ff-8687-4ccd-9279-71da084ff186",
+              "name": "사업자등록번호",
+              "value": "={{ $json.bizr_no }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        -1312
+      ],
+      "id": "5a5aab7a-4bda-4cea-aa20-33d5821c3940",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseKey": ""
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1328,
+        -1312
+      ],
+      "id": "22adb466-40ec-46ad-a3a7-e9265d089f78",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acf7b7f7-3fdb-4363-a3d5-408f08e6002b",
+              "name": "body[\"기업코드\"]",
+              "value": "={{ $json.body[\"기업코드\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "2f7046dd-0cf5-45e9-a44b-809d5d54406a",
+              "name": "body[\"회사명\"]",
+              "value": "={{ $json.body[\"회사명\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        -800
+      ],
+      "id": "cab25a47-2e37-4db3-84c3-373caa005393",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "list",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -496
+      ],
+      "id": "6717e93a-90b2-4a6c-98fb-50c4a7c0a2e6",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 우선 조건에 맞는 데이터만 필터링합니다.\nconst filteredData = $input.all()\n  .map(item => item.json.list) // list 안의 내용물만 추출\n  .filter(data => \n    data && \n    data.fs_nm === \"재무제표\" && \n    [\"매출액\", \"영업이익\"].includes(data.account_nm)\n  );\n\n// 2. 필터링된 결과가 있다면 하나의 아이템으로 묶어서 반환합니다.\nreturn [\n  {\n    json: {\n      results: filteredData,\n      count: filteredData.length,\n      updated_at: new Date()\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        -496
+      ],
+      "id": "b175b6d7-4eee-466a-aa70-70f34b24366e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=용도별 금액 데이터를 분석 직전년도매출액과 영업이익을\n그리고서 3개년 매출추이 와 영업이익추이를 알려줘  \n답변의 출력내용은 아래 기준에 맞춰서 답변해줘\n\n1. '좋습니다, '해드릴게요, 같은 관용적 표현은 하지않는다\n2. 형식은 다음 예와 같이 보기쉽고 간결하게 작성해줘 \n(예시)\n 매출액\n     2022 년  매출액 ###억\n     2023 년  매출액 ###억\n     2024 년  매출액 ###억\n    매출액 추이  매출액은 오름세이고 연평균 # 억씩 상승중이다\n  매출액\n     2022 년  영업이익 ###억\n     2023 년  영업이익 ###억\n     2024 년  영업이익 ###억\n    영업이익 추이  영업이익 오름세이고 연평균 # 억씩 상승중이다\n참고데이터 \n 매출액 보고서  :  {{ $json.results[0].account_nm }}\n 2022년 연도 : {{ $json.results[0].bfefrmtrm_dt }}\n 2022년 실적 : {{ $json.results[0].bfefrmtrm_amount }} 금액은 원단위\n 2023년 연도 : {{ $json.results[0].frmtrm_dt }}\n 2023년 실적 : {{ $json.results[0].frmtrm_amount }} 금액은 원단위\n 2024년 연도 : {{ $json.results[0].thstrm_dt }}\n 2024년 실적 : {{ $json.results[0].thstrm_amount }}금액은 원단위\n \n영업이익 보고서  :  {{ $json.results[1].account_nm }}\n 2022년 연도 : {{ $json.results[1].bfefrmtrm_dt }}\n 2022년 실적 : {{ $json.results[1].bfefrmtrm_amount }}금액은 원단위\n 2023년 연도 : {{ $json.results[1].frmtrm_dt }}\n 2023년 실적 :  {{ $json.results[1].frmtrm_amount }}금액은 원단위\n 2024년 연도 : {{ $json.results[1].thstrm_dt }}\n 2024년 실적 : {{ $json.results[1].thstrm_amount }}금액은 원단위\n3. 연도는 대이터를 보고 판단하여 출력한다\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1760,
+        -608
+      ],
+      "id": "4769d3c9-4b6b-4aeb-9530-f7cb1a6117b0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1840,
+        -384
+      ],
+      "id": "cdbbbb30-8857-4493-8849-9beffca848e3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "w6LXJiLQW6QD3Wjb",
+          "name": "pyk_OpenAi account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://opendart.fss.or.kr/api/fnlttSinglAcnt.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "crtfc_key",
+              "value": "5d834244fe90807501a032bf79de260c2c5fae30"
+            },
+            {
+              "name": "corp_code",
+              "value": "={{ $json.body[\"기업코드\"] }}"
+            },
+            {
+              "name": "bsns_year",
+              "value": "={{ $now.minus({years:2}).year }}"
+            },
+            {
+              "name": "reprt_code",
+              "value": "11011"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        864,
+        -368
+      ],
+      "id": "2fa6bdca-8165-4dae-89ef-800993f7c305",
+      "name": "DART 사업보고서 API 호출"
+    },
+    {
+      "parameters": {
+        "url": "https://opendart.fss.or.kr/api/company.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "crtfc_key",
+              "value": "5d834244fe90807501a032bf79de260c2c5fae30"
+            },
+            {
+              "name": "corp_code",
+              "value": "={{ $json.body[\"기업코드\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1824,
+        -800
+      ],
+      "id": "1b2666d3-1849-4ab5-aaf7-9eba0ef88cbd",
+      "name": "DART 기업개황API 호출"
+    },
+    {
+      "parameters": {
+        "url": "https://openapi.naver.com/v1/search/news.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json[\"회사명\"] }}"
+            },
+            {
+              "name": "display",
+              "value": "50"
+            },
+            {
+              "name": "sort",
+              "value": "date"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": " X-Naver-Client-Id",
+              "value": "Okx8hODXEuFxZ9zZGw38"
+            },
+            {
+              "name": "X-Naver-Client-Secret",
+              "value": "Ncw73NvbJO"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        640,
+        0
+      ],
+      "id": "45092db2-aaac-4014-a54a-806650aeee73",
+      "name": "네이버 뉴스 검색 API 호출"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        864,
+        0
+      ],
+      "id": "e6b8f323-c754-44e3-96a9-0e33fe04492d",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed3b0818-eff2-4c94-8fe5-df83d24d055a",
+              "name": "제목",
+              "value": "={{ $json.items.title }}",
+              "type": "string"
+            },
+            {
+              "id": "4f744201-ced5-48f8-b0c3-9e17b7985ca0",
+              "name": "본문",
+              "value": "={{ $json.items.description }}",
+              "type": "string"
+            },
+            {
+              "id": "4e9303b2-3491-4637-be9d-e7c9551e0bac",
+              "name": "작성일",
+              "value": "={{ $json.items.pubDate }}",
+              "type": "string"
+            },
+            {
+              "id": "a4b10d5f-5fd5-410f-b866-e4787b967bae",
+              "name": "링크",
+              "value": "={{ $json.items.link }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1088,
+        0
+      ],
+      "id": "5fc6254f-ced8-4a8e-9001-c7a693e0887b",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        0
+      ],
+      "id": "00eef16b-8ef9-4644-ad53-ec9673d35a1a",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n아래는 총 {{ $json.total_count }}건의 뉴스 기사 리스트입니다. 이 전체 내용을 분석해서 중요한 이슈별로 10가지 요약해줘.\n내용:\n{{ $json.all_news_text }}\n뉴스를 요약할때 는 아래 사항을 철저히 지켜서 작성해줘\n1. 작성일이 최근 8개월 이내의 기사만 요약한다  \n3. 고객과 관련된 내용만 요약한다 \n4.각각의 요약된 내용은 500자 이내로 작성한다\n5. 작성형식은 아래와 같이  작성한다 \n최근 {{ $('Edit Fields3').item.json.body[\"회사명\"] }} 의 동향 정보 (네이버뉴스참조)\n1. 요약내용1\n2. 요약내용2\n3. 요약내용3\n4. 요약내용4\n5. 요약내용5\n...",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1760,
+        0
+      ],
+      "id": "e23267c0-b1ba-4e46-9eee-8f4d447eb031",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1840,
+        224
+      ],
+      "id": "4d5b38f4-fafe-4ed1-99fd-e1723297a82c",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "w6LXJiLQW6QD3Wjb",
+          "name": "pyk_OpenAi account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 대상 노드에서 회사명을 가져옵니다.\nlet companyName = $('Edit Fields3').first().json.body[\"회사명\"];\n\n// 2. '(주)' 글자를 찾아 제거합니다. \n// / \\(주\\) /g -> 괄호와 (주)를 모두 찾아서 공백(\"\")으로 바꿉니다.\n// .trim() -> 앞뒤에 남을 수 있는 빈칸까지 정리합니다.\nif (companyName) {\n  companyName = companyName.replace(/\\(주\\)/g, \"\").trim();\n}\n\n// 3. 결과를 반환합니다.\nreturn [\n  {\n    json: {\n      기업코드 : $('Edit Fields3').first().json.body[\"기업코드\"],\n      오리지날회사명: $('Edit Fields3').first().json.body[\"회사명\"],\n      회사명: companyName\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "f42f2d4f-d0a0-4edb-a200-d88052ec35af",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 입력 데이터에서 기사 리스트(data)를 가져옵니다.\nconst articles = $input.first().json.data;\n\n// 2. 제목과 본문을 예쁘게 합칩니다.\nconst combinedText = articles.map((article, index) => {\n  return `[기사 ${index + 1}]\\n제목: ${article.제목}\\n본문: ${article.본문}\\n작성일: ${article.작성일}\\n`;\n}).join('\\n---\\n'); // 기사 사이에 구분선을 넣어서 AI가 읽기 편하게 만듭니다.\n\n// 3. 하나의 아이템으로 결과물을 반환합니다.\nreturn [\n  {\n    json: {\n      all_news_text: combinedText,\n      total_count: articles.length\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        0
+      ],
+      "id": "9e7fd5f1-14b4-4f30-ad98-763f8f88e786",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "278489bd-0bbd-479d-b70f-85c4cfa13463",
+              "name": "회사명",
+              "value": "={{ $json.corp_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f50105ca-2868-40ed-bda6-6f3399b6bd8a",
+              "name": "대표명",
+              "value": "={{ $json.ceo_nm }}",
+              "type": "string"
+            },
+            {
+              "id": "ab89577b-b3e7-496e-8dae-83c198d999cd",
+              "name": "주소",
+              "value": "={{ $json.adres }}",
+              "type": "string"
+            },
+            {
+              "id": "55eca990-19dd-48ec-83d7-34077fa104b2",
+              "name": "사업자등록번호",
+              "value": "={{ $json.bizr_no }}",
+              "type": "string"
+            },
+            {
+              "id": "e1a8c141-a7aa-4bd1-b60d-30ab54a5ec8a",
+              "name": "대표전화번호",
+              "value": "={{ $json.phn_no }}",
+              "type": "string"
+            },
+            {
+              "id": "45a77c7d-a59f-41de-962a-5455f1040917",
+              "name": "홈페이지",
+              "value": "={{ $json.hm_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2112,
+        -800
+      ],
+      "id": "1ef65010-0d2e-4ca4-8fe7-dd9411df389d",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2432,
+        -784
+      ],
+      "id": "d36293d4-e691-4e96-aca9-2f8c01cf1a05",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2656,
+        -768
+      ],
+      "id": "1982e903-d5cf-4d29-bec9-3a5716f17c30",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c3658d65-9000-44f3-816c-aa2b398b420c",
+              "name": "DART 공시정보",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2112,
+        -496
+      ],
+      "id": "a9360adb-009c-4122-aaea-210ea2f06cad",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ad859b8-c54c-40b0-9504-e8dc91cbdfab",
+              "name": "뉴스동향",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2112,
+        0
+      ],
+      "id": "5ea1289f-9901-4817-a511-4319f6c2b64f",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "412aa21b-a92c-42ad-803e-41655894a7a8",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "000",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        -368
+      ],
+      "id": "cab0a7a0-8364-48b5-aa84-e6a733f70961",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3c35b9ca-b085-41cf-b54f-e90897d61b38",
+              "name": "DART공시정보",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2112,
+        -256
+      ],
+      "id": "bcf69d45-99a6-450d-a3a2-c32b7af11883",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "content": "# 검색어로 DART 기업코드 정보조회\n## 한글로 업체명 입력시 연관 회사 리스트 리턴\n",
+        "height": 304,
+        "width": 1760
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -176,
+        -1456
+      ],
+      "typeVersion": 1,
+      "id": "592d72f1-3991-49c2-b360-e9d754f338f3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# 기업 개황정보 조회\n## DART에서 조회한 기업 개황 정보 조회 API\n",
+        "height": 272,
+        "width": 512,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1760,
+        -912
+      ],
+      "typeVersion": 1,
+      "id": "6913f012-df3a-421f-941a-0ed6e60de057",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# DART 재무제표 조회 요약\n\n",
+        "height": 528,
+        "width": 1504,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        -624
+      ],
+      "typeVersion": 1,
+      "id": "e03f68a8-74b0-4a30-b6fa-c7506a96bec1",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 웹페이지에서 업체 클릭 시 구동",
+        "height": 304,
+        "width": 208
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        -928
+      ],
+      "typeVersion": 1,
+      "id": "acf084c2-6482-4a03-8183-1893fe867a86",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# 네이버 뉴스 검색 및 요약\n\n",
+        "height": 432,
+        "width": 1872,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "6d6ef9de-dd49-450c-abc5-f141bc55d975",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.type }}",
+                    "rightValue": "=customerSearch",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "961fe290-6dea-46bb-a4ed-6f818a98cbe8"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e4c5d5b2-61c1-4d64-9a18-3a3135d01915",
+                    "leftValue": "={{ $json.query.type }}",
+                    "rightValue": "custinfo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -464,
+        -1312
+      ],
+      "id": "26791f95-1ab8-4bba-bb1a-c9db3098d8dc",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "path": "8f180191-3c96-43a1-8a9d-22c3894342ee",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -896,
+        -1328
+      ],
+      "id": "86473486-7e92-4987-97da-1b5700aac489",
+      "name": "Webhook",
+      "webhookId": "8f180191-3c96-43a1-8a9d-22c3894342ee"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "DART 기업개황API 호출",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DART 사업보고서 API 호출",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DART 사업보고서 API 호출": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "네이버 뉴스 검색 API 호출": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "네이버 뉴스 검색 API 호출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DART 기업개황API 호출": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "49b05577-6601-4857-93eb-66d0e7182ec8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ce918c2bdf630e82a9511a22c73bc1007e668893d0a2554115b8c9ff3d00b493"
+  },
+  "id": "oOa_C2AUcgLs1Li8pfkDd",
+  "tags": []
+}
