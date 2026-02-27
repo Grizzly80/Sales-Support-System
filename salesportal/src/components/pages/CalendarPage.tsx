@@ -400,7 +400,7 @@ const CalendarPage: React.FC = () => {
                                     <label className="block text-xs font-bold text-gray-400 mb-1 ml-1">일자</label>
                                     <input
                                         type="date"
-                                        className="w-full p-4 bg-gray-50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
+                                        className="w-full p-4 bg-gray-50 rounded-2xl text-base focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
                                         value={newActivity.date}
                                         onChange={e => setNewActivity({ ...newActivity, date: e.target.value })}
                                     />
@@ -414,7 +414,7 @@ const CalendarPage: React.FC = () => {
                                         readOnly
                                         type="text"
                                         placeholder="돋보기 버튼을 눌러 검색하세요"
-                                        className="flex-1 p-4 bg-gray-50 rounded-2xl text-sm focus:outline-none cursor-pointer"
+                                        className="flex-1 p-4 bg-gray-50 rounded-2xl text-base focus:outline-none cursor-pointer"
                                         value={newActivity.customerName || ''}
                                         onClick={handleSearchClick}
                                     />
@@ -432,7 +432,7 @@ const CalendarPage: React.FC = () => {
                                     <label className="block text-xs font-bold text-gray-400 mb-1 ml-1">시간</label>
                                     <input
                                         type="time"
-                                        className="w-full p-4 bg-gray-50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                        className="w-full p-4 bg-gray-50 rounded-2xl text-base focus:outline-none focus:ring-2 focus:ring-primary/20"
                                         value={newActivity.time}
                                         onChange={e => setNewActivity({ ...newActivity, time: e.target.value })}
                                     />
@@ -440,7 +440,7 @@ const CalendarPage: React.FC = () => {
                                 <div>
                                     <label className="block text-xs font-bold text-gray-400 mb-1 ml-1">활동 구분</label>
                                     <select
-                                        className="w-full p-4 bg-gray-50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
+                                        className="w-full p-4 bg-gray-50 rounded-2xl text-base focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
                                         value={newActivity.type}
                                         onChange={e => setNewActivity({ ...newActivity, type: e.target.value as any })}
                                     >
@@ -457,7 +457,7 @@ const CalendarPage: React.FC = () => {
                                 <textarea
                                     placeholder="활동 내용을 상세히 기록하세요"
                                     rows={4}
-                                    className="w-full p-4 bg-gray-50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                                    className="w-full p-4 bg-gray-50 rounded-2xl text-base focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
                                     value={newActivity.content || ''}
                                     onChange={e => setNewActivity({ ...newActivity, content: e.target.value })}
                                 />
@@ -492,7 +492,7 @@ const CalendarPage: React.FC = () => {
                                 autoFocus
                                 type="text"
                                 placeholder="고객사를 검색하세요"
-                                className="w-full p-4 bg-gray-50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 pr-12"
+                                className="w-full p-4 bg-gray-50 rounded-2xl text-base focus:outline-none focus:ring-2 focus:ring-primary/20 pr-12"
                                 value={searchQuery}
                                 onChange={e => setSearchQuery(e.target.value)}
                                 onKeyDown={e => e.key === 'Enter' && performSearch()}

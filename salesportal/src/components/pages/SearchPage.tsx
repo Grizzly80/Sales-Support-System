@@ -80,7 +80,7 @@ const SearchPage: React.FC = () => {
                     <input
                         type="text"
                         placeholder="고객사 명을 입력하세요"
-                        className="flex-1 p-4 bg-transparent text-sm focus:outline-none"
+                        className="flex-1 p-4 bg-transparent text-base focus:outline-none"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />

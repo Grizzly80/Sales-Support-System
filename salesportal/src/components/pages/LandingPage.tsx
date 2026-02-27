@@ -86,7 +86,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
                             <input
                                 type="text"
                                 placeholder="아이디"
-                                className="block w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                className="block w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-primary/20 transition-all outline-none"
                                 value={userId}
                                 onChange={(e) => setUserId(e.target.value)}
                             />
@@ -98,7 +98,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
                             <input
                                 type="password"
                                 placeholder="비밀번호"
-                                className="block w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                className="block w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-primary/20 transition-all outline-none"
                                 value={userPw}
                                 onChange={(e) => setUserPw(e.target.value)}
                             />
