@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TopBar from './components/layout/TopBar';
 import BottomNav from './components/layout/BottomNav';
 import { CalendarPage, SearchPage, RecordsPage, LandingPage } from './components/pages';
+import { storage } from './utils/storage';
 
 type Tab = 'calendar' | 'search' | 'records';
 
@@ -9,7 +10,8 @@ type Tab = 'calendar' | 'search' | 'records';
  * 메인 애플리케이션 컴포넌트
  */
 function App() {
-  const [isStarted, setIsStarted] = useState(false);
+  // 새로고침 시 세션 정보가 있으면 바로 시작페이지 건너뜀
+  const [isStarted, setIsStarted] = useState(() => !!storage.getUserInfo());
   const [activeTab, setActiveTab] = useState<Tab>('calendar');
 
   const getTitle = () => {
@@ -30,6 +32,14 @@ function App() {
     setActiveTab('calendar');
   };
 
+  const handleLogout = () => {
+    if (window.confirm('로그아웃 하시겠습니까?')) {
+      storage.clearUserInfo();
+      setIsStarted(false);
+      setActiveTab('calendar');
+    }
+  };
+
   if (!isStarted) {
     return <LandingPage onStart={() => setIsStarted(true)} />;
   }
@@ -41,6 +51,7 @@ function App() {
         title={getTitle()}
         onBack={handleBack}
         onHome={handleHome}
+        onLogout={handleLogout}
       />
 
       {/* Main Content Area */}
