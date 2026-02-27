@@ -48,5 +48,32 @@ export const storage = {
         const activities = storage.getActivities();
         const filtered = activities.filter(a => a.id !== id);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+    },
+
+    /**
+     * 사용자 세션 정보를 저장합니다.
+     */
+    setUserInfo: (userInfo: { USERID: string; USER_NM: string; DEPT_CD: string; DEPT_NM: string }) => {
+        localStorage.setItem('user_session', JSON.stringify(userInfo));
+    },
+
+    /**
+     * 저장된 사용자 세션 정보를 가져옵니다.
+     */
+    getUserInfo: () => {
+        const data = localStorage.getItem('user_session');
+        if (!data) return null;
+        try {
+            return JSON.parse(data);
+        } catch (e) {
+            return null;
+        }
+    },
+
+    /**
+     * 세션 정보를 삭제(로그아웃)합니다.
+     */
+    clearUserInfo: () => {
+        localStorage.removeItem('user_session');
     }
 };

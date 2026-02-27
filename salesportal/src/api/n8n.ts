@@ -1,4 +1,5 @@
 import type { SearchParams, CustomerInfo } from '../types';
+import { storage } from '../utils/storage';
 
 // n8n Webhook URL (Replace with actual URL from your n8n instance)
 const N8N_WEBHOOK_URL = 'https://genai100.app.n8n.cloud/webhook/8f180191-3c96-43a1-8a9d-22c3894342ee';
@@ -16,6 +17,18 @@ export const n8nApi = {
             customerName
         };
         return n8nApi._fetch(payload);
+    },
+
+    /**
+     * 로그인 웹훅 호출 (type: login)
+     */
+    login: async (userId: string, userPw: string): Promise<any> => {
+        const payload: any = {
+            type: 'login',
+            userId,
+            userPw
+        };
+        return await n8nApi._fetch(payload);
     },
 
     /**
@@ -176,7 +189,10 @@ export const n8nApi = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    ...payload,
+                    USERID: storage.getUserInfo()?.USERID || (payload as any).userId || (payload as any).USERID
+                }),
             });
 
             if (!response.ok) throw new Error('API request failed');

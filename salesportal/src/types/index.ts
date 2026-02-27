@@ -34,7 +34,7 @@ export interface CustomerInfo {
  * n8n API 요청 정보
  */
 export interface SearchParams {
-    type: 'customerSearch' | 'custinfo' | 'custselect' | 'actibity' | 'findact' | 'actdelete';
+    type: 'customerSearch' | 'custinfo' | 'custselect' | 'actibity' | 'findact' | 'actdelete' | 'login';
     customerName?: string;
     companyCode?: string;
     query?: string;

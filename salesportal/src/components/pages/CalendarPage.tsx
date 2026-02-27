@@ -52,20 +52,29 @@ const CalendarPage: React.FC = () => {
         activitiesMap.set(item.id, item);
     });
 
-    // 2. 로컬 스토리지 데이터 중 중복되지 않은 것만 추가
+    // 2. 로컬 스토리지 데이터 처리
+    const currentMonthStr = format(currentMonth, 'yyyy-MM');
     localActivities.forEach(item => {
-        if (!activitiesMap.has(item.id)) {
-            // ID가 다르더라도 내용(일자, 시간, 고객명, 활동내용)이 100% 일치하면 중복으로 간주
-            const isDuplicate = Array.from(activitiesMap.values()).some(existing =>
-                existing.date === item.date &&
-                existing.time === item.time &&
-                existing.customerName === item.customerName &&
-                existing.content === item.content
-            );
+        // 이미 맵에 있는 ID는 점프
+        if (activitiesMap.has(item.id)) return;
 
-            if (!isDuplicate) {
-                activitiesMap.set(item.id, item);
-            }
+        // [수정] 서버에서 데이터를 가져온 상태라면, 해당 월의 로컬 데이터는 표시하지 않음 (서버 데이터가 최종본)
+        const itemMonth = item.date.substring(0, 7);
+        if (webhookActivities.length > 0 && itemMonth === currentMonthStr) {
+            // 서버 데이터가 있는 달인데 아직 동기화되지 않은 로컬 데이터는 '유령 데이터'일 가능성이 높으므로 제외
+            return;
+        }
+
+        // 그 외의 경우(다른 달이거나 서버 데이터가 아직 로딩 전일 때)만 중복 체크 후 추가
+        const isDuplicate = Array.from(activitiesMap.values()).some(existing =>
+            existing.date === item.date &&
+            existing.time === item.time &&
+            existing.customerName === item.customerName &&
+            existing.content === item.content
+        );
+
+        if (!isDuplicate) {
+            activitiesMap.set(item.id, item);
         }
     });
     const activities = Array.from(activitiesMap.values());
