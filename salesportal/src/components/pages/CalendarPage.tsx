@@ -360,7 +360,7 @@ const CalendarPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* 새 일정 등록 버튼 (하단 이동) */}
+            {/* 일정 등록 버튼 (하단 이동) */}
             <button
                 onClick={() => {
                     setNewActivity({
@@ -373,7 +373,7 @@ const CalendarPage: React.FC = () => {
                 className="w-full bg-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 apple-button shadow-lg shadow-primary/20"
             >
                 <Plus className="w-5 h-5" />
-                새 일정 등록
+                일정 등록
             </button>
 
             {/* 일정 등록 모달 */}
