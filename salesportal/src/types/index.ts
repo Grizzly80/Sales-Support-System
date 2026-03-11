@@ -27,6 +27,8 @@ export interface CustomerInfo {
     홈페이지?: string;
     DART공시정보?: string;
     'DART 공시정보'?: string;
+    회사개요?: string;
+    'DART공시 재무요약'?: string;
     뉴스동향?: string;
 }
 

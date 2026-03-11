@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import TopBar from './components/layout/TopBar';
 import BottomNav from './components/layout/BottomNav';
 import { CalendarPage, SearchPage, RecordsPage, LandingPage } from './components/pages';
 import { storage } from './utils/storage';
+
 
 type Tab = 'calendar' | 'search' | 'records';
 
@@ -13,6 +14,17 @@ function App() {
   // 새로고침 시 세션 정보가 있으면 바로 시작페이지 건너뜀
   const [isStarted, setIsStarted] = useState(() => !!storage.getUserInfo());
   const [activeTab, setActiveTab] = useState<Tab>('calendar');
+  const mainRef = useRef<HTMLElement>(null);
+
+  // 탭 변경 시 스크롤 위치 초기화
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (mainRef.current) {
+      mainRef.current.scrollTo(0, 0);
+    }
+  }, [activeTab]);
+
+
 
   const getTitle = () => {
     switch (activeTab) {
@@ -45,7 +57,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans select-none animate-in fade-in duration-500">
+    <div className="h-screen bg-gray-50 flex flex-col font-sans select-none animate-in fade-in duration-500 overflow-hidden">
       {/* Top Bar */}
       <TopBar
         title={getTitle()}
@@ -55,7 +67,9 @@ function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto max-w-md mx-auto w-full">
+      <main ref={mainRef} className="flex-1 overflow-y-auto max-w-md mx-auto w-full pb-20">
+
+
         {activeTab === 'calendar' && <CalendarPage />}
         {activeTab === 'search' && <SearchPage />}
         {activeTab === 'records' && <RecordsPage />}

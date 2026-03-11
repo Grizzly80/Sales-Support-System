@@ -161,15 +161,28 @@ const SearchPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* DART 공시 정보 (있는 경우) */}
-                        {(selectedCustomer['DART 공시정보'] || selectedCustomer.DART공시정보) && (
+                        {/* DART 공시정보 - 회사개요 */}
+                        {selectedCustomer.회사개요 && (
                             <div className="apple-card p-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-500 delay-100">
                                 <div className="flex items-center gap-2 text-primary">
                                     <FileSearch className="w-5 h-5" />
-                                    <h3 className="font-bold">DART 공시정보</h3>
+                                    <h3 className="font-bold">DART공시정보 - 회사개요</h3>
+                                </div>
+                                <div className="text-sm text-gray-700 bg-gray-50/30 p-4 rounded-2xl whitespace-pre-wrap leading-relaxed border border-gray-100/50 shadow-inner break-words">
+                                    {selectedCustomer.회사개요}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* DART 공시정보 - 매출액/영업이익 */}
+                        {(selectedCustomer['DART공시 재무요약'] || selectedCustomer['DART 공시정보'] || selectedCustomer.DART공시정보) && (
+                            <div className="apple-card p-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-500 delay-150">
+                                <div className="flex items-center gap-2 text-primary">
+                                    <TrendingUp className="w-5 h-5" />
+                                    <h3 className="font-bold">DART공시정보 - 매출액/영업이익</h3>
                                 </div>
                                 <div className="border border-gray-100 rounded-2xl overflow-hidden bg-gray-50/30">
-                                    <DartTable text={selectedCustomer['DART 공시정보'] || selectedCustomer.DART공시정보} />
+                                    <DartTable text={selectedCustomer['DART공시 재무요약'] || selectedCustomer['DART 공시정보'] || selectedCustomer.DART공시정보} />
                                 </div>
                             </div>
                         )}
@@ -182,7 +195,7 @@ const SearchPage: React.FC = () => {
                                     <h3 className="font-bold">AI 분석 리포트 (뉴스 동향)</h3>
                                 </div>
 
-                                <div className="text-sm text-gray-700 bg-white/50 p-4 rounded-xl whitespace-pre-wrap leading-relaxed">
+                                <div className="text-sm text-gray-700 bg-white/50 p-4 rounded-xl whitespace-pre-wrap leading-relaxed break-words">
                                     {selectedCustomer.뉴스동향}
                                 </div>
                             </div>
@@ -236,65 +249,92 @@ const DartTable = ({ text }: { text: any }) => {
         }
     }
 
-    // 2. JSON 객체인 경우 (구조화된 데이터 또는 단순 키-값 쌍)
-    if (isJson && data && !Array.isArray(data)) {
+    // 2. JSON 데이터 처리
+    if (isJson && data) {
         const sections: any[] = [];
 
-        // 2-1. 고도로 구조화된 데이터 ({ 매출액: { 연도: [], 실적: [] } }) 확인
-        const structuredKeys = ['매출액', '영업이익', '당기순이익'].filter(key =>
-            data[key] && typeof data[key] === 'object' && Array.isArray(data[key].연도) && (Array.isArray(data[key].실적) || Array.isArray(data[key].금액))
-        );
-
-        if (structuredKeys.length > 0) {
-            structuredKeys.forEach(key => {
-                const item = data[key];
-                const values = item.실적 || item.금액;
-                const yearData = item.연도.map((y: any, i: number) => ({
-                    year: String(y).replace(/[^0-9]/g, ''),
-                    val: values[i] || 'N/A'
-                }));
+        // 2-0. 배열 형식 처리 (재무요약 등)
+        if (Array.isArray(data)) {
+            data.forEach((item: any) => {
+                const title = item.category || item.항목 || '데이터';
+                const yearData: { year: string; val: string }[] = [];
+                
+                Object.keys(item).forEach(key => {
+                    if (key.match(/^\d{4}$/)) {
+                        let val = String(item[key]);
+                        // 천단위 콤마가 있고 숫자가 큰 경우 억 단위 포맷팅 시도
+                        if (val.includes(',')) {
+                            const num = parseInt(val.replace(/,/g, ''));
+                            if (!isNaN(num) && num >= 100000000) {
+                                val = (num / 100000000).toFixed(2) + '억';
+                            }
+                        }
+                        yearData.push({ year: key, val });
+                    }
+                });
+                
+                // 연도 기준 정렬
+                yearData.sort((a, b) => parseInt(a.year) - parseInt(b.year));
+                
                 if (yearData.length > 0) {
-                    sections.push({
-                        title: key,
-                        yearData,
-                        trendLine: item[`${key} 추이`] || item.추이 || item.trend || item[`${key}추이`]
-                    });
+                    sections.push({ title, yearData });
+                }
+            });
+        } 
+        // 2-1. 객체 형식 처리
+        else {
+            // 기존 고도로 구조화된 데이터 확인
+            const structuredKeys = ['매출액', '영업이익', '당기순이익'].filter(key =>
+                data[key] && typeof data[key] === 'object' && Array.isArray(data[key].연도) && (Array.isArray(data[key].실적) || Array.isArray(data[key].금액))
+            );
+
+            if (structuredKeys.length > 0) {
+                structuredKeys.forEach(key => {
+                    const item = data[key];
+                    const values = item.실적 || item.금액;
+                    const yearData = item.연도.map((y: any, i: number) => ({
+                        year: String(y).replace(/[^0-9]/g, ''),
+                        val: values[i] || 'N/A'
+                    }));
+                    if (yearData.length > 0) {
+                        sections.push({
+                            title: key,
+                            yearData,
+                            trendLine: item[`${key} 추이`] || item.추이 || item.trend || item[`${key}추이`]
+                        });
+                    }
+                });
+            }
+
+            // 남은 필드들 처리
+            Object.entries(data).forEach(([key, value]) => {
+                if (structuredKeys.includes(key)) return;
+
+                if (typeof value === 'object' && value !== null) {
+                    const yearData: { year: string; val: string }[] = [];
+                    const valStr = JSON.stringify(value);
+                    const amountMatch = valStr.match(/([\d,.]+\s*(?:억|원|만원|백만원))/);
+                    if (amountMatch) {
+                        const yearMatch = valStr.match(/(\d{4})\s*년/);
+                        yearData.push({
+                            year: yearMatch ? yearMatch[1] : (String((value as any).연도 || 'N/A').replace(/[^0-9]/g, '') || 'N/A'),
+                            val: amountMatch[1]
+                        });
+                        sections.push({ title: key, yearData });
+                    }
+                } else if (typeof value === 'string' || typeof value === 'number') {
+                    const str = String(value);
+                    const yearData: { year: string; val: string }[] = [];
+                    const yearMatch = str.match(/(\d{4})\s*년/);
+                    const amountMatch = str.match(/([\d,.]+\s*(?:억|원|만원|백만원))/);
+
+                    if (yearMatch && amountMatch) {
+                        yearData.push({ year: yearMatch[1], val: amountMatch[1] });
+                        sections.push({ title: key, yearData, trendLine: str.includes('추이') ? str : '' });
+                    }
                 }
             });
         }
-
-        // 2-2. 남은 필드들 중 일반적인 키-값 쌍 처리 (매출액: "2023년 100억" 등)
-        Object.entries(data).forEach(([key, value]) => {
-            // 이미 처리된 구조화된 키는 스킵
-            if (structuredKeys.includes(key)) return;
-
-            if (typeof value === 'object' && value !== null) {
-                // 단순 하위 객체 (예: { 연도: "2023", 금액: "100억" })
-                const yearData: { year: string; val: string }[] = [];
-                const valStr = JSON.stringify(value);
-                const amountMatch = valStr.match(/([\d,.]+\s*(?:억|원|만원|백만원))/);
-                if (amountMatch) {
-                    const yearMatch = valStr.match(/(\d{4})\s*년/);
-                    yearData.push({
-                        year: yearMatch ? yearMatch[1] : (String((value as any).연도 || 'N/A').replace(/[^0-9]/g, '') || 'N/A'),
-                        val: amountMatch[1]
-                    });
-                    sections.push({ title: key, yearData });
-                }
-            } else if (typeof value === 'string' || typeof value === 'number') {
-                // 문자열 또는 숫자 값
-                const str = String(value);
-                const yearData: { year: string; val: string }[] = [];
-                // 연도와 금액 추출 시도
-                const yearMatch = str.match(/(\d{4})\s*년/);
-                const amountMatch = str.match(/([\d,.]+\s*(?:억|원|만원|백만원))/);
-
-                if (yearMatch && amountMatch) {
-                    yearData.push({ year: yearMatch[1], val: amountMatch[1] });
-                    sections.push({ title: key, yearData, trendLine: str.includes('추이') ? str : '' });
-                }
-            }
-        });
 
         if (sections.length > 0) {
             return (
@@ -367,9 +407,8 @@ const DartTable = ({ text }: { text: any }) => {
         );
     }
 
-    // 4. 모든 파싱 실패 시 원본 텍스트 그대로 표시
     return (
-        <div className="p-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+        <div className="p-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed break-all">
             {cleanStr || String(text)}
         </div>
     );
