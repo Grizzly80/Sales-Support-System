@@ -74,22 +74,22 @@ const SearchPage: React.FC = () => {
             )}
 
             {/* 검색 바 */}
-            <div className="apple-card p-2 flex items-center gap-2">
-                <form onSubmit={handleSearch} className="flex-1 flex items-center">
-                    <Search className="w-5 h-5 text-gray-400 ml-4" />
+            <div className="apple-card p-1.5 flex items-center overflow-hidden">
+                <form onSubmit={handleSearch} className="flex-1 flex items-center min-w-0">
+                    <Search className="w-4 h-4 text-gray-400 ml-3 flex-shrink-0" />
                     <input
                         type="text"
                         placeholder="고객사 명을 입력하세요"
-                        className="flex-1 p-4 bg-transparent text-base focus:outline-none"
+                        className="flex-1 py-3 px-3 bg-transparent text-base focus:outline-none min-w-0"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold mr-2 apple-button disabled:opacity-50"
+                        className="bg-primary text-white px-5 h-10 rounded-xl text-sm font-bold flex-shrink-0 apple-button disabled:opacity-50"
                     >
-                        {isLoading ? '검색 중...' : '검색'}
+                        {isLoading ? '...' : '검색'}
                     </button>
                 </form>
             </div>
